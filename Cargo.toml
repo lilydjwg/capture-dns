@@ -1,0 +1,15 @@
+[package]
+name = "capture-dns"
+version = "0.1.0"
+authors = ["lilydjwg <lilydjwg@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+pcap = "*"
+trust-dns-proto = "*"
+structopt = "*"
+structopt-derive = "*"
+failure = "*"
+
+[profile.release]
+lto = true
