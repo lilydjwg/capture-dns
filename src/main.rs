@@ -1,6 +1,4 @@
-#[macro_use(format_err)] extern crate failure;
-
-use failure::Error;
+use failure::{Error, format_err};
 use structopt::StructOpt;
 use trust_dns_proto::op::message::Message;
 use trust_dns_proto::serialize::binary::BinDecodable;
