@@ -24,13 +24,21 @@ fn process(packet: &[u8]) {
         },
         None => { return },
       };
+      let mut spaces = None;
       for a in msg.answers() {
+        let name_part: &str = match spaces {
+          None => {
+            spaces = Some(" ".repeat(name.len()));
+            &name
+          },
+          Some(ref x) => &x,
+        };
         match a.rdata() {
           RData::A(ip) => {
-            println!("{} -> {}", name, ip);
+            println!("{} -> {}", name_part, ip);
           },
           RData::AAAA(ip) => {
-            println!("{} -> {}", name, ip);
+            println!("{} -> {}", name_part, ip);
           },
           _ => {},
         }
