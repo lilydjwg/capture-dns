@@ -26,6 +26,12 @@ fn process(packet: &[u8]) {
       };
       let mut spaces = None;
       for a in msg.answers() {
+        match a.rdata() {
+          RData::A(_) => { },
+          RData::AAAA(_) => { },
+          _ => { continue },
+        };
+
         let name_part: &str = match spaces {
           None => {
             spaces = Some(" ".repeat(name.len()));
@@ -40,7 +46,7 @@ fn process(packet: &[u8]) {
           RData::AAAA(ip) => {
             println!("{} -> {}", name_part, ip);
           },
-          _ => {},
+          _ => unreachable!(),
         }
       }
     },
