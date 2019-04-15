@@ -32,12 +32,12 @@ fn process(packet: &[u8]) {
           _ => { continue },
         };
 
-        let name_part: &str = match spaces {
+        let name_part: &str = match &spaces {
           None => {
             spaces = Some(" ".repeat(name.len()));
-            &name
+            name
           },
-          Some(ref x) => &x,
+          Some(x) => x,
         };
         match a.rdata() {
           RData::A(ip) => {
