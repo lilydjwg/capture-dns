@@ -29,6 +29,7 @@ fn process(packet: &[u8]) {
         match a.rdata() {
           RData::A(_) => { },
           RData::AAAA(_) => { },
+          RData::CNAME(_) => { },
           _ => { continue },
         };
 
@@ -45,6 +46,11 @@ fn process(packet: &[u8]) {
           },
           RData::AAAA(ip) => {
             println!("{} -> {}", name_part, ip);
+          },
+          RData::CNAME(cname) => {
+            let s = cname.to_string();
+            let name = s.trim_end_matches('.');
+            println!("{} -> {}", name_part, name);
           },
           _ => unreachable!(),
         }
