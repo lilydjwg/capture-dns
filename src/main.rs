@@ -38,8 +38,8 @@ fn process(packet: &[u8]) {
           },
           RData::CNAME(cname) => {
             let s = cname.to_string();
-            let name = s.trim_end_matches('.');
-            println!("{} {} {}", name, arrow, name);
+            let cname_str = s.trim_end_matches('.');
+            println!("{} {} {}", name, arrow, cname_str);
           },
           _ => { },
         }
