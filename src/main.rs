@@ -24,36 +24,27 @@ fn process(packet: &[u8]) {
         },
         None => { return },
       };
-      let mut spaces = None;
-      for a in msg.answers() {
-        match a.rdata() {
-          RData::A(_) => { },
-          RData::AAAA(_) => { },
-          RData::CNAME(_) => { },
-          _ => { continue },
-        };
 
-        let name_part: &str = match &spaces {
-          None => {
-            spaces = Some(" ".repeat(name.len()));
-            name
-          },
-          Some(x) => x,
-        };
+      let mut is_first = true;
+      for a in msg.answers() {
+        let arrow = if is_first { "=>" } else { "->" };
+
         match a.rdata() {
           RData::A(ip) => {
-            println!("{} -> {}", name_part, ip);
+            println!("{} {} {}", name, arrow, ip);
           },
           RData::AAAA(ip) => {
-            println!("{} -> {}", name_part, ip);
+            println!("{} {} {}", name, arrow, ip);
           },
           RData::CNAME(cname) => {
             let s = cname.to_string();
             let name = s.trim_end_matches('.');
-            println!("{} -> {}", name_part, name);
+            println!("{} {} {}", name, arrow, name);
           },
-          _ => unreachable!(),
+          _ => { },
         }
+
+        is_first = false;
       }
     },
     Err(e) => eprintln!("Error: {:?}", e),
