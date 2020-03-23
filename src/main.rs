@@ -57,7 +57,8 @@ fn main() -> Result<(), Error> {
     .filter(|d| d.name == opt.device).nth(0)
     .ok_or_else(|| format_err!("device {} not found", opt.device))?;
 
-  let mut cap = device.open()?;
+  let mut cap = pcap::Capture::from_device(device)?
+    .immediate(true).open()?;
   cap.filter("ip proto \\udp and src port 53")?;
   loop {
    let packet = cap.next()?;

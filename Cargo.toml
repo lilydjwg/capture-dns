@@ -5,11 +5,14 @@ authors = ["lilydjwg <lilydjwg@gmail.com>"]
 edition = "2018"
 
 [dependencies]
-pcap = "*"
 trust-dns-proto = "*"
 structopt = "*"
 structopt-derive = "*"
 failure = "*"
+
+[dependencies.pcap]
+git = "https://github.com/lilydjwg/pcap"
+version = "*"
 
 [profile.release]
 lto = true
