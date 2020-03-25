@@ -61,7 +61,10 @@ fn main() -> Result<(), Error> {
     .immediate(true).open()?;
   cap.filter("ip proto \\udp and src port 53")?;
   loop {
-   let packet = cap.next()?;
-   process(&packet);
+    match cap.next() {
+      Ok(packet) => process(&packet),
+      Err(pcap::Error::TimeoutExpired) => { },
+      Err(e) => return Err(e.into()),
+    }
   }
 }
