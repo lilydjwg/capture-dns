@@ -9,10 +9,7 @@ trust-dns-proto = "*"
 structopt = "*"
 structopt-derive = "*"
 failure = "*"
-
-[dependencies.pcap]
-git = "https://github.com/lilydjwg/pcap"
-version = "*"
+pcap = "0.8"
 
 [profile.release]
 lto = true

@@ -17,7 +17,7 @@ fn process(packet: &[u8]) {
     Ok(msg) => {
       let qname;
       let name;
-      match msg.queries().iter().nth(0) {
+      match msg.queries().iter().next() {
         Some(q) => {
           qname = q.name().to_string();
           name = qname.trim_end_matches('.');
@@ -54,11 +54,11 @@ fn process(packet: &[u8]) {
 fn main() -> Result<(), Error> {
   let opt = Opt::from_args();
   let device = pcap::Device::list()?.into_iter()
-    .filter(|d| d.name == opt.device).nth(0)
+    .find(|d| d.name == opt.device)
     .ok_or_else(|| format_err!("device {} not found", opt.device))?;
 
   let mut cap = pcap::Capture::from_device(device)?
-    .immediate(true).open()?;
+    .immediate_mode(true).open()?;
   cap.filter("ip proto \\udp and src port 53")?;
   loop {
     match cap.next() {
