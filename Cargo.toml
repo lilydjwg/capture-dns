@@ -8,7 +8,7 @@ edition = "2021"
 trust-dns-proto = "*"
 structopt = "*"
 structopt-derive = "*"
-failure = "*"
+eyre = "*"
 pcap = "*"
 
 [profile.release]

@@ -1,4 +1,4 @@
-use failure::{Error, format_err};
+use eyre::{Result, eyre};
 use structopt::StructOpt;
 use trust_dns_proto::op::message::Message;
 use trust_dns_proto::serialize::binary::BinDecodable;
@@ -83,11 +83,11 @@ fn process(packet: &[u8]) {
   }
 }
 
-fn main() -> Result<(), Error> {
+fn main() -> Result<()> {
   let opt = Opt::from_args();
   let device = pcap::Device::list()?.into_iter()
     .find(|d| d.name == opt.device)
-    .ok_or_else(|| format_err!("device {} not found", opt.device))?;
+    .ok_or_else(|| eyre!("device {} not found", opt.device))?;
 
   let mut cap = pcap::Capture::from_device(device)?
     .immediate_mode(true).open()?;
