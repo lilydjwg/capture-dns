@@ -2,14 +2,14 @@
 name = "capture-dns"
 version = "0.1.0"
 authors = ["lilydjwg <lilydjwg@gmail.com>"]
-edition = "2018"
+edition = "2021"
 
 [dependencies]
 trust-dns-proto = "*"
 structopt = "*"
 structopt-derive = "*"
 failure = "*"
-pcap = "0.8"
+pcap = "*"
 
 [profile.release]
 lto = true
