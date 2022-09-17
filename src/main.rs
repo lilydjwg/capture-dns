@@ -1,13 +1,13 @@
 use eyre::{Result, eyre};
-use structopt::StructOpt;
 use trust_dns_proto::op::message::Message;
 use trust_dns_proto::serialize::binary::BinDecodable;
 use trust_dns_proto::rr::record_data::RData;
+use clap::Parser;
 
-#[derive(StructOpt)]
-#[structopt(name = "capture-dns", about = "Capture DNS requests and show their QNames")]
+#[derive(Parser)]
+#[clap(author, version, about, long_about = "Capture DNS requests and show their QNames")]
 struct Opt {
-  #[structopt(help = "device", default_value = "wlan0")]
+  #[clap(help = "device", default_value = "wlan0")]
   device: String,
 }
 
@@ -93,7 +93,7 @@ fn main() -> Result<()> {
     .immediate_mode(true).open()?;
   cap.filter("ip proto \\udp and src port 53", true)?;
   loop {
-    match cap.next() {
+    match cap.next_packet() {
       Ok(packet) => process(&packet),
       Err(pcap::Error::TimeoutExpired) => { },
       Err(e) => return Err(e.into()),
