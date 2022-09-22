@@ -5,9 +5,9 @@ use trust_dns_proto::rr::record_data::RData;
 use clap::Parser;
 
 #[derive(Parser)]
-#[clap(author, version, about, long_about = "Capture DNS requests and show their QNames")]
+#[command(author, version, about, long_about = "Capture DNS requests and show their QNames")]
 struct Opt {
-  #[clap(help = "device", default_value = "wlan0")]
+  #[arg(help = "device", default_value = "wlan0")]
   device: String,
   #[arg(long, help = "pcap filter", default_value = "ip proto \\udp and src port 53")]
   filter: String,
@@ -16,15 +16,15 @@ struct Opt {
 fn show_rdata(name: &str, rdata: &RData, arrow: &str) {
   match rdata {
     RData::A(ip) => {
-      println!("{} {} {}", name, arrow, ip);
+      println!("{name} {arrow} {ip}");
     },
     RData::AAAA(ip) => {
-      println!("{} {} {}", name, arrow, ip);
+      println!("{name} {arrow} {ip}");
     },
     RData::CNAME(cname) => {
       let s = cname.to_string();
       let cname_str = s.trim_end_matches('.');
-      println!("{} {} {}", name, arrow, cname_str);
+      println!("{name} {arrow} {cname_str}");
     },
 
     RData::HTTPS(svcb) => {
@@ -38,14 +38,14 @@ fn show_rdata(name: &str, rdata: &RData, arrow: &str) {
           SvcParamValue::Ipv4Hint(IpHint(ips)) => {
             for ip in ips {
               let arrow = if is_first { "=>" } else { "->" };
-              println!("{} {} {} {}", name, arrow, tag, ip);
+              println!("{name} {arrow} {tag} {ip}");
               is_first = false;
             }
           },
           SvcParamValue::Ipv6Hint(IpHint(ips)) => {
             for ip in ips {
               let arrow = if is_first { "=>" } else { "->" };
-              println!("{} {} {} {}", name, arrow, tag, ip);
+              println!("{name} {arrow} {tag} {ip}");
               is_first = false;
             }
           },
@@ -81,12 +81,12 @@ fn process(packet: &[u8]) {
         is_first = false;
       }
     },
-    Err(e) => eprintln!("Error: {:?}", e),
+    Err(e) => eprintln!("Error: {e:?}"),
   }
 }
 
 fn main() -> Result<()> {
-  let opt = Opt::from_args();
+  let opt = Opt::parse();
   let device = pcap::Device::list()?.into_iter()
     .find(|d| d.name == opt.device)
     .ok_or_else(|| eyre!("device {} not found", opt.device))?;
