@@ -9,6 +9,8 @@ use clap::Parser;
 struct Opt {
   #[clap(help = "device", default_value = "wlan0")]
   device: String,
+  #[arg(long, help = "pcap filter", default_value = "ip proto \\udp and src port 53")]
+  filter: String,
 }
 
 fn show_rdata(name: &str, rdata: &RData, arrow: &str) {
@@ -91,7 +93,7 @@ fn main() -> Result<()> {
 
   let mut cap = pcap::Capture::from_device(device)?
     .immediate_mode(true).open()?;
-  cap.filter("ip proto \\udp and src port 53", true)?;
+  cap.filter(&opt.filter, true)?;
   loop {
     match cap.next_packet() {
       Ok(packet) => process(&packet),
