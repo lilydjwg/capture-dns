@@ -1,11 +1,11 @@
 [package]
 name = "capture-dns"
-version = "0.2.0"
+version = "0.3.0"
 authors = ["lilydjwg <lilydjwg@gmail.com>"]
 edition = "2021"
 
 [dependencies]
-trust-dns-proto = "*"
+hickory-proto = "*"
 clap = { version = "*", features = ["derive"] }
 eyre = "*"
 pcap = "*"

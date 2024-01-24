@@ -1,7 +1,7 @@
 use eyre::{Result, eyre};
-use trust_dns_proto::op::message::Message;
-use trust_dns_proto::serialize::binary::BinDecodable;
-use trust_dns_proto::rr::record_data::RData;
+use hickory_proto::op::message::Message;
+use hickory_proto::serialize::binary::BinDecodable;
+use hickory_proto::rr::record_data::RData;
 use clap::Parser;
 
 #[derive(Parser)]
@@ -28,7 +28,7 @@ fn show_rdata(name: &str, rdata: &RData, arrow: &str) {
     },
 
     RData::HTTPS(svcb) => {
-      use trust_dns_proto::rr::rdata::svcb::{SvcParamKey, SvcParamValue, IpHint};
+      use hickory_proto::rr::rdata::svcb::{SvcParamKey, SvcParamValue, IpHint};
       let has_ech = svcb.svc_params().iter()
         .any(|(k, _)| matches!(k, SvcParamKey::EchConfig));
       let tag = if has_ech { "HTTPS ECH" } else { "HTTPS" };
