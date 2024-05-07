@@ -5,7 +5,7 @@ authors = ["lilydjwg <lilydjwg@gmail.com>"]
 edition = "2021"
 
 [dependencies]
-hickory-proto = "*"
+hickory-proto = { version = "*", default-features = false }
 clap = { version = "*", features = ["derive"] }
 eyre = "*"
 pcap = "*"
