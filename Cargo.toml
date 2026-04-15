@@ -1,8 +1,8 @@
 [package]
 name = "capture-dns"
-version = "0.3.0"
+version = "0.3.1"
 authors = ["lilydjwg <lilydjwg@gmail.com>"]
-edition = "2021"
+edition = "2024"
 
 [dependencies]
 hickory-proto = { version = "*", default-features = false }

@@ -30,7 +30,7 @@ fn show_rdata(name: &str, rdata: &RData, arrow: &str) {
     RData::HTTPS(svcb) => {
       use hickory_proto::rr::rdata::svcb::{SvcParamKey, SvcParamValue, IpHint};
       let has_ech = svcb.svc_params().iter()
-        .any(|(k, _)| matches!(k, SvcParamKey::EchConfig));
+        .any(|(k, _)| matches!(k, SvcParamKey::EchConfigList));
       let tag = if has_ech { "HTTPS ECH" } else { "HTTPS" };
       let mut is_first = true;
       for (_, v) in svcb.svc_params() {
@@ -75,9 +75,7 @@ fn process(packet: &[u8]) {
       let mut is_first = true;
       for a in msg.answers() {
         let arrow = if is_first { "=>" } else { "->" };
-        if let Some(rdata) = a.data() {
-          show_rdata(name, rdata, arrow);
-        }
+        show_rdata(name, a.data(), arrow);
         is_first = false;
       }
     },
