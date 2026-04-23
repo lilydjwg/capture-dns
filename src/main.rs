@@ -1,7 +1,7 @@
 use eyre::{Result, eyre};
-use hickory_proto::op::message::Message;
+use hickory_proto::op::Message;
 use hickory_proto::serialize::binary::BinDecodable;
-use hickory_proto::rr::record_data::RData;
+use hickory_proto::rr::RData;
 use clap::Parser;
 
 #[derive(Parser)]
@@ -29,11 +29,11 @@ fn show_rdata(name: &str, rdata: &RData, arrow: &str) {
 
     RData::HTTPS(svcb) => {
       use hickory_proto::rr::rdata::svcb::{SvcParamKey, SvcParamValue, IpHint};
-      let has_ech = svcb.svc_params().iter()
+      let has_ech = svcb.svc_params.iter()
         .any(|(k, _)| matches!(k, SvcParamKey::EchConfigList));
       let tag = if has_ech { "HTTPS ECH" } else { "HTTPS" };
       let mut is_first = true;
-      for (_, v) in svcb.svc_params() {
+      for (_, v) in &svcb.svc_params {
         match v {
           SvcParamValue::Ipv4Hint(IpHint(ips)) => {
             for ip in ips {
@@ -64,7 +64,7 @@ fn process(packet: &[u8]) {
     Ok(msg) => {
       let qname;
       let name;
-      match msg.queries().iter().next() {
+      match msg.queries.first() {
         Some(q) => {
           qname = q.name().to_string();
           name = qname.trim_end_matches('.');
@@ -73,9 +73,9 @@ fn process(packet: &[u8]) {
       };
 
       let mut is_first = true;
-      for a in msg.answers() {
+      for a in msg.answers {
         let arrow = if is_first { "=>" } else { "->" };
-        show_rdata(name, a.data(), arrow);
+        show_rdata(name, &a.data, arrow);
         is_first = false;
       }
     },
